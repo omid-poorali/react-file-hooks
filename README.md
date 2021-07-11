@@ -1,8 +1,8 @@
-
 # React File Hooks
 
 React File Hooks is a hook simply for file upload using axios
-🖥️[Live Example](https://codesandbox.io/s/react-file-hooks-dbj71)
+
+🖥️[Live Example](https://codesandbox.io/s/react-file-hooks-ngxy4)
 
 ## Install
 ```bash
@@ -22,8 +22,8 @@ import { useUploader } from  'react-file-hooks';
 const  App = () => {
 
   const [uploadTasks, uploadTasksHelper] = useUploader({
-   url:  'https://file.io?expires=1w',
-   fieldname:  "file",
+    url:  'https://file.io?expires=1w',
+    fieldname:  "file",
     method:  'post',
     headers: { 'Content-Type':  'multipart/form-data' } //optional
     multiple:false  // optional and default is true
@@ -38,23 +38,23 @@ const  App = () => {
 // explain startUploadTask arguments here
 
    const  handleChange = (e) => {
-       startUploadTask(e.currentTarget.files, // file or files that you want to upload
-       {'any-other-stuff':  'hello'}, // Optional data that you want to send beside uploading file
-       (task)=>console.log(task)); // call whenever uploading task failed or be success
+      startUploadTask(e.currentTarget.files, // file or files that you want to upload
+      {'any-other-stuff':  'hello'}, // Optional data that you want to send beside uploading file
+      (task)=>console.log(task)); // call whenever uploading task failed or be success
    }
 
    return (
          <div>
             <input  type="file"  onChange={handleChange} />
-           <pre>{JSON.stringify(uploadTasks, null, 2)}</pre>
+            <pre>{JSON.stringify(uploadTasks, null, 2)}</pre>
          </div>
    );
 };
 ```
 
 ### Functions and parameters
-when you want upload a file use :
-`useUploader()` and it takes  object of type `UploadParams` as an argument
+
+`useUploader()` takes  object of type `UploadParams` as an argument
 
 ```typescript jsx
 export  interface  UploadParams {
