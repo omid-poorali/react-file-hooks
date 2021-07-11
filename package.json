@@ -2,7 +2,7 @@
   "name": "@toranj/react-file-hooks",
   "author": "OmidPoorali",
   "private": false,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "react hook for file upload",
   "license": "MIT",
   "main": "dist/index.js",
