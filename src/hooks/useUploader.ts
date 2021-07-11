@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import { formatFileSize } from '../utils';
@@ -9,9 +9,15 @@ const useUploader = ({
   fieldname,
   method,
   headers,
-  meta,
+  multiple = true,
 }: UploadParams): Uploader => {
-  const [uploadTasks, setUploadTask] = useState<Task[] | []>([]);
+  const [state, setState] = useState<Task[] | []>([]);
+  const uploadTasks = useRef<Task[] | []>(state);
+
+  const setUploadTask = (callback: Function) => {
+    uploadTasks.current = callback(uploadTasks.current);
+    setState(uploadTasks.current);
+  };
 
   const updateTask = useCallback(
     (id: string, data: Partial<Task>) => {
@@ -28,7 +34,7 @@ const useUploader = ({
   );
 
   const uploadFile = useCallback(
-    async (id: string, file: File) => {
+    async ({ id, file, files, meta, callback }: Task) => {
       const defaultConfig = {
         onUploadProgress: ({ total, loaded }: ProgressEvent) => {
           const progress = Math.round((loaded / total) * 100);
@@ -39,18 +45,34 @@ const useUploader = ({
       };
       try {
         const form = new FormData();
-        form.append(`${fieldname}`, file);
+
+        for (let key in meta) {
+          if (meta.hasOwnProperty(key)) {
+            form.append(`${key}`, meta[key]);
+          }
+        }
+
+        if (files) {
+          for (let file of files) {
+            form.append(`${fieldname}`, file);
+          }
+        } else if (file) {
+          form.append(`${fieldname}`, file);
+        }
+
         const res = await axios.request({
           ...defaultConfig,
           ...{ url, method, headers, data: form },
         });
         const status: Task['status'] = 'uploaded';
         updateTask(id, {
-          responseData: res.data,
           status,
+          responseData: res.data,
           httpStatus: res.status,
-          meta,
         });
+        if (callback) {
+          callback(uploadTasks.current.find((task: Task) => task.id === id));
+        }
       } catch (e) {
         const status: Task['status'] = 'failed';
         updateTask(id, {
@@ -58,47 +80,83 @@ const useUploader = ({
           httpStatus: e && e.response && e.response.status,
           responseData: e && e.response && e.response.data,
         });
+        if (callback) {
+          callback(uploadTasks.current.find((task: Task) => task.id === id));
+        }
       }
     },
-    [updateTask]
+    [uploadTasks, updateTask]
   );
 
   const retryUploadTask = useCallback(
     (id: string) => {
-      const shouldUpdateTask = uploadTasks.find(el => el.id === id);
+      const shouldUpdateTask = uploadTasks.current.find(
+        (task: Task) => task.id === id
+      );
       if (shouldUpdateTask) {
-        uploadFile(id, shouldUpdateTask.file);
+        uploadFile(shouldUpdateTask);
       }
     },
     [uploadTasks, uploadFile]
   );
 
   const startUploadTask = useCallback(
-    (acceptedFiles: File[] | FileList) => {
+    (
+      acceptedFiles: File[] | FileList,
+      meta?: { [key: string]: any } | Function,
+      callback?: Function
+    ) => {
       // return if null or undefined
       if (!acceptedFiles) {
         return;
       }
+      if (typeof meta === 'function') {
+        callback = meta;
+        meta = undefined;
+      }
       const fileList = Array.from(acceptedFiles); // converts to array if FileList
-      const arr: Task[] = fileList.map((file: File) => {
-        return {
-          id: uuidv4(),
-          file,
-          progress: 0,
-          status: 'uploading',
-          formattedSize: formatFileSize(file.size),
-        } as Task;
-      });
+      let arr: Task[] | [] = [];
 
-      setUploadTask(odt => [...odt, ...arr]);
-      arr.map(({ id, file }) => uploadFile(id, file));
+      if (multiple) {
+        arr = fileList.map((file: File) => {
+          return {
+            id: uuidv4(),
+            file,
+            progress: 0,
+            status: 'uploading',
+            formattedSize: formatFileSize(file.size),
+            meta,
+            callback,
+          } as Task;
+        });
+      } else {
+        let filesSize: number = 0;
+        for (const file of fileList) {
+          filesSize = filesSize + file.size;
+        }
+
+        arr = [
+          {
+            id: uuidv4(),
+            files: fileList,
+            progress: 0,
+            status: 'uploading',
+            formattedSize: formatFileSize(filesSize),
+            meta,
+            callback,
+          } as Task,
+        ];
+      }
+
+      setUploadTask((odt: Task[]) => [...odt, ...arr]);
+      arr.map((task: Task) => uploadFile(task));
     },
-    [setUploadTask]
+    [uploadFile, setUploadTask]
   );
 
   const stopUploadTask = useCallback(
     (id: string) => {
-      setUploadTask(odt => odt.filter((el: Task) => el.id !== id));
+      setUploadTask((odt: Task[]) => odt.filter((el: Task) => el.id !== id));
     },
     [setUploadTask]
   );
@@ -108,7 +166,7 @@ const useUploader = ({
   }, [setUploadTask]);
 
   return [
-    uploadTasks,
+    state,
     { startUploadTask, retryUploadTask, stopUploadTask, clearUploadTasks },
   ];
 };

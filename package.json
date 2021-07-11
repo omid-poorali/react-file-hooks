@@ -1,12 +1,17 @@
 {
+  "name": "@toranj/react-file-hooks",
+  "author": "toranj-org",
+  "private": false,
   "version": "1.0.0",
+  "description": "React hook for file upload",
   "license": "MIT",
   "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "types": "dist/index.d.ts",
+  "module": "dist/react-file-hooks.esm.js",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=10"
   },
@@ -19,11 +24,6 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "peerDependencies": {
-    "react": ">=16",
-    "uuid": "*",
-    "axios": "*"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -35,9 +35,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@toranj/react-file-hooks",
-  "author": "toranj-org",
-  "module": "dist/react-file-hooks.esm.js",
   "size-limit": [
     {
       "path": "dist/react-file-hooks.cjs.production.min.js",
@@ -48,13 +45,25 @@
       "limit": "10 KB"
     }
   ],
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "keywords": [
+    "uploader",
+    "hook",
+    "react",
+    "file-uploader"
+  ],
+  "dependencies": {
+    "axios": "^0.21.1",
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.10.2",
     "@testing-library/react-hooks": "^5.1.2",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.4",
     "@types/uuid": "^8.3.0",
-    "axios": "^0.21.1",
     "husky": "^6.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -62,5 +71,13 @@
     "tsdx": "^0.14.1",
     "tslib": "^2.2.0",
     "typescript": "^4.2.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toranj-org/react-file-hooks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/toranj-org/react-file-hooks/issues"
+  },
+  "homepage": "https://github.com/toranj-org/react-file-hooks#readme"
 }
