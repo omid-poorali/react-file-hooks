@@ -29,7 +29,7 @@ it('returns correct object', async () => {
   expect(Object.keys(result.current[1])).toEqual([
     'startUploadTask',
     'retryUploadTask',
-    'stopUploadTask',
+    'removeUploadTask',
     'clearUploadTasks',
   ]);
 
@@ -94,7 +94,7 @@ it('handles upload failure', async () => {
   expect(Object.keys(result.current[1])).toEqual([
     'startUploadTask',
     'retryUploadTask',
-    'stopUploadTask',
+    'removeUploadTask',
     'clearUploadTasks',
   ]);
 
@@ -134,7 +134,7 @@ it('handles upload failure', async () => {
 
   // remove
   act(() => {
-    result.current[1].stopUploadTask(result.current[0][0].id);
+    result.current[1].removeUploadTask(result.current[0][0].id);
   });
 
   expect(result.current[0].length).toEqual(0);
@@ -154,7 +154,7 @@ it('fail because having no meta', async () => {
   expect(Object.keys(result.current[1])).toEqual([
     'startUploadTask',
     'retryUploadTask',
-    'stopUploadTask',
+    'removeUploadTask',
     'clearUploadTasks',
   ]);
 
@@ -190,7 +190,7 @@ it('upload only if having key as meta', async () => {
   expect(Object.keys(result.current[1])).toEqual([
     'startUploadTask',
     'retryUploadTask',
-    'stopUploadTask',
+    'removeUploadTask',
     'clearUploadTasks',
   ]);
 
@@ -226,7 +226,7 @@ it('callback must return uploaded task', async done => {
   expect(Object.keys(result.current[1])).toEqual([
     'startUploadTask',
     'retryUploadTask',
-    'stopUploadTask',
+    'removeUploadTask',
     'clearUploadTasks',
   ]);
 
@@ -273,7 +273,7 @@ it('upload all files in one task', async () => {
   expect(Object.keys(result.current[1])).toEqual([
     'startUploadTask',
     'retryUploadTask',
-    'stopUploadTask',
+    'removeUploadTask',
     'clearUploadTasks',
   ]);
 

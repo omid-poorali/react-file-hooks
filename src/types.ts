@@ -28,7 +28,7 @@ export type Uploader = [
       callback?: Function
     ) => void;
     retryUploadTask: (id: string) => void;
-    stopUploadTask: (id: string) => void;
+    removeUploadTask: (id: string) => void;
     clearUploadTasks: () => void;
   }
 ];

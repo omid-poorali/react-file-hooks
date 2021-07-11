@@ -19,8 +19,7 @@ const useUploader = ({
     setState(uploadTasks.current);
   };
 
-  const updateTask = useCallback(
-    (id: string, data: Partial<Task>) => {
+  const updateTask = useCallback((id: string, data: Partial<Task>) => {
       setUploadTask((odt: Task[]) => {
         return odt.map((el: Task) => {
           if (el.id === id) {
@@ -40,8 +39,7 @@ const useUploader = ({
           const progress = Math.round((loaded / total) * 100);
           const status: Task['status'] = 'uploading';
           updateTask(id, { progress, status });
-        },
-        data: file,
+        }
       };
       try {
         const form = new FormData();
@@ -88,11 +86,8 @@ const useUploader = ({
     [uploadTasks, updateTask]
   );
 
-  const retryUploadTask = useCallback(
-    (id: string) => {
-      const shouldUpdateTask = uploadTasks.current.find(
-        (task: Task) => task.id === id
-      );
+  const retryUploadTask = useCallback((id: string) => {
+      const shouldUpdateTask = uploadTasks.current.find((task: Task) => task.id === id);
       if (shouldUpdateTask) {
         uploadFile(shouldUpdateTask);
       }
@@ -154,7 +149,7 @@ const useUploader = ({
     [uploadFile, setUploadTask]
   );
 
-  const stopUploadTask = useCallback(
+  const removeUploadTask = useCallback(
     (id: string) => {
       setUploadTask((odt: Task[]) => odt.filter((el: Task) => el.id !== id));
     },
@@ -167,7 +162,7 @@ const useUploader = ({
 
   return [
     state,
-    { startUploadTask, retryUploadTask, stopUploadTask, clearUploadTasks },
+    { startUploadTask, retryUploadTask, removeUploadTask, clearUploadTasks },
   ];
 };
 

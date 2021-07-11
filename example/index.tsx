@@ -38,7 +38,7 @@ const App = () => {
       </div>
 
       <div style={{ marginRight: 5, marginLeft: 5, marginTop: 15 }}>
-        <button onClick={() => uploadTasksHelper.stopUploadTask(id)}>stopUploadTask</button>
+        <button onClick={() => uploadTasksHelper.removeUploadTask(id)}>removeUploadTask</button>
         <input value={id} onChange={e => setId(() => e.target.value)} type="text" />
       </div>
 

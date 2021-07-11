@@ -1,9 +1,9 @@
 {
   "name": "@toranj/react-file-hooks",
-  "author": "toranj-org",
+  "author": "OmidPoorali",
   "private": false,
   "version": "1.0.0",
-  "description": "React hook for file upload",
+  "description": "react hook for file upload",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -46,7 +46,8 @@
     }
   ],
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=16",
+    "axios": "*"
   },
   "keywords": [
     "uploader",
@@ -55,7 +56,6 @@
     "file-uploader"
   ],
   "dependencies": {
-    "axios": "^0.21.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -64,6 +64,7 @@
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.4",
     "@types/uuid": "^8.3.0",
+    "axios": "^0.21.1",
     "husky": "^6.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
