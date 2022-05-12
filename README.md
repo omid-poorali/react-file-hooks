@@ -1,45 +1,55 @@
 # React File Hooks
 
 [![NPM Version][npm-image]][npm-url]
-[![Linux Build][travis-image]][travis-url]
 [![Github License][license-image]][license-url]
 
 React File Hooks is a hook simply for file upload
 It can be used with a simple `<input type="file"/>`
 
-
 🖥️[Live Example](https://codesandbox.io/s/react-file-hooks-ygi10)
 
-## Install
+## Installation
 
 ```bash
-// npm
 npm install @toranj/react-file-hooks axios
+```
 
-// or yarn
+or
+
+```bash
 yarn add @toranj/react-file-hooks axios
 ```
 
 ## Usage
 
-```typescript jsx
-import React from "react";
+### `useUploader`
+
+```jsx
+import * as React from "react";
 import { useUploader } from "@toranj/react-file-hooks";
 
-const App = () => {
+export default () => {
+  const stopId = React.useRef(null);
+  const removeId = React.useRef(null);
+  const retryId = React.useRef(null);
   const inputRef = React.useRef(null);
-  const [id, setId] = React.useState("");
 
   const [uploadTasks, uploadTasksHelper] = useUploader({
-    url: "/api/upload",
+    url: "https://file.io?expires=1w",
     fieldname: "file",
     method: "post",
-    headers: { "Content-Type": "multipart/form-data" },
-    multiple: false
+    headers: { "Content-Type": "multipart/form-data" }
+    // separately:true  if you want to create seperate task for each file
   });
 
   function handleChange(e) {
-    uploadTasksHelper.startUploadTask(e.currentTarget.files);
+    uploadTasksHelper.start(
+      e.currentTarget.files
+      // {
+      //   key1: "value1",
+      //   key2: "value2"
+      // }
+    );
   }
 
   return (
@@ -52,53 +62,52 @@ const App = () => {
         type="file"
         onChange={handleChange}
       />
-      <div>
+      <button
+        style={{ marginRight: 5, marginLeft: 5 }}
+        onClick={() => inputRef.current?.click()}
+      >
+        upload
+      </button>
+      <div style={{ marginTop: 5 }}>
         <button
           style={{ marginRight: 5, marginLeft: 5 }}
-          onClick={() => inputRef.current?.click()}
+          onClick={() =>
+            uploadTasksHelper.stop(stopId.current?.value ?? "taskId")
+          }
         >
-          startUploadTask
+          stop
         </button>
+        <input placeholder="taskId" ref={stopId} type="text" />
+      </div>
+      <div style={{ marginTop: 5 }}>
         <button
           style={{ marginRight: 5, marginLeft: 5 }}
-          onClick={() => uploadTasksHelper.clearUploadTasks()}
+          onClick={() =>
+            uploadTasksHelper.remove(removeId.current?.value ?? "taskId")
+          }
         >
-          clearUploadTasks
+          remove
         </button>
+        <input placeholder="taskId" ref={removeId} type="text" />
       </div>
-
-      <div style={{ marginRight: 5, marginLeft: 5, marginTop: 15 }}>
-        <button onClick={() => uploadTasksHelper.removeUploadTask(id)}>
-          removeUploadTask
+      <div style={{ marginTop: 5 }}>
+        <button
+          style={{ marginRight: 5, marginLeft: 5 }}
+          onClick={() =>
+            uploadTasksHelper.retry(retryId.current?.value ?? "taskId")
+          }
+        >
+          retry
         </button>
-        <input
-          value={id}
-          onChange={(e) => setId(() => e.target.value)}
-          type="text"
-        />
-      </div>
-
-      <div style={{ marginRight: 5, marginLeft: 5, marginTop: 15 }}>
-        <button onClick={() => uploadTasksHelper.retryUploadTask(id)}>
-          retryUploadTask
-        </button>
-        <input
-          value={id}
-          onChange={(e) => setId(() => e.target.value)}
-          type="text"
-        />
+        <input placeholder="taskId" ref={retryId} type="text" />
       </div>
     </div>
   );
 };
-```
 
-## License
-MIT
+```
 
 [npm-image]: https://img.shields.io/npm/v/@toranj/react-file-hooks
 [npm-url]: https://www.npmjs.com/package/@toranj/react-file-hooks
-[travis-image]: https://api.travis-ci.com/toranj-org/react-file-hooks.svg?branch=main
-[travis-url]: https://app.travis-ci.com/github/toranj-org/react-file-hooks
 [license-image]: https://img.shields.io/badge/license-MIT-blue.svg
 [license-url]: https://raw.githubusercontent.com/toranj-org/react-file-hooks/main/LICENSE

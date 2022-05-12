@@ -1,4 +1,4 @@
-import { formatFileSize } from '../src/utils';
+import { formatFileSize,nextId } from '../src/utils';
 
 describe('formatFileSize', () => {
   it.each([
@@ -11,5 +11,13 @@ describe('formatFileSize', () => {
     [1000000000000, '1.0 TB'],
   ])('"%s" should return %s', (input, expected) => {
     expect(formatFileSize(input)).toEqual(expected);
+  });
+});
+
+describe("nextId", () => {
+  it("generates unique id", () => {
+    for (let i = 1; i < 10; i++) {
+      expect(nextId()).toBe(`${i}`);
+    }
   });
 });

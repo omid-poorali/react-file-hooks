@@ -1,34 +1,44 @@
-export interface UploadParams {
-  url: string;
-  fieldname: string;
-  method: any;
-  headers?: { [key: string]: any };
-  multiple?: boolean;
+import { AxiosRequestHeaders, Method } from "axios";
+
+export const Uploading = "uploading";
+export const Uploaded = "uploaded";
+export const Failed = "failed";
+export type UploadStatus =  typeof Uploading | typeof Uploaded | typeof Failed;
+
+export type UploadParams = {
+  url: any;
+  fieldname: any;
+  method: Method
+  headers?: AxiosRequestHeaders,
+  separately?:boolean;
 }
 
-export interface Task {
+export type TaskResult<A = any> = {
+  httpStatus: number | undefined;
+  responseData: A | undefined;
+}
+
+export type Task<A = any> = {
   id: string;
-  file?: File;
-  files?: File[];
+  source: File | File[];
   progress: number;
+  status: UploadStatus;
   formattedSize: string;
-  status: 'uploading' | 'uploaded' | 'failed';
-  httpStatus: number | null;
-  responseData: any;
   meta?: { [key: string]: any };
-  callback: Function;
+  result?: TaskResult<A>;
 }
 
-export type Uploader = [
-  Task[] | [],
+type Start = {
+  (source: File | File[] | FileList): void;
+  (source: File | File[] | FileList, meta?: { [key: string]: any }): void;
+}
+
+export type Uploader<Result> = [
+  Task<Result>[],
   {
-    startUploadTask: (
-      files: File[] | FileList,
-      meta?: { [key: string]: any } | Function,
-      callback?: Function
-    ) => void;
-    retryUploadTask: (id: string) => void;
-    removeUploadTask: (id: string) => void;
-    clearUploadTasks: () => void;
+    start: Start;
+    stop: (id: string) => void;
+    retry: (id: string) => void;
+    remove: (id: string) => void;
   }
 ];

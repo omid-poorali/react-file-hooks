@@ -1,5 +1,10 @@
+node_modules
 *.log
 .DS_Store
-node_modules
-.cache
+.vscode
+es
+lib
 dist
+coverage
+package-lock.json
+yarn.lock

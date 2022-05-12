@@ -1,18 +1,25 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": false,
-    "target": "es5",
-    "module": "commonjs",
+    "allowJs": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
     "jsx": "react",
+    "lib": ["ESNext", "dom"],
+    "module": "ESNext",
     "moduleResolution": "node",
-    "noImplicitAny": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "removeComments": true,
-    "strictNullChecks": true,
-    "preserveConstEnums": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "lib/",
+    "pretty": true,
+    "skipLibCheck": true,
     "sourceMap": true,
-    "lib": ["es2015", "es2016", "dom"],
-    "types": ["node"]
-  }
+    "strict": true,
+    "target": "ESNext",
+    "paths": {
+      "@toranj/react-file-hooks": ["../src"]
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["./**/*"]
 }

@@ -11,3 +11,9 @@ export const formatFileSize = (sizeInBytes: number) => {
   } while (Math.abs(sizeInBytes) >= thresh && u < units.length - 1);
   return sizeInBytes.toFixed(1) + ' ' + units[u];
 };
+
+let lastId = 0;
+export const nextId = (): string => {
+  lastId++;
+  return `${lastId}`;
+}

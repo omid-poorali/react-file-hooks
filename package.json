@@ -1,78 +1,30 @@
 {
   "name": "@toranj/react-file-hooks",
-  "author": "OmidPoorali",
-  "private": false,
-  "version": "1.0.2",
-  "description": "react hook for file upload",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/react-file-hooks.esm.js",
+  "version": "2.0.3",
+  "description": "react hook for uploading file or files",
+  "source": "./src/index.ts",
+  "main": "./lib/index.js",
+  "module": "es/index.js",
+  "types": "./es/index.d.ts",
+  "unpkg": "dist/react-file-hooks.js",
   "sideEffects": false,
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": ">=10"
-  },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
-  "size-limit": [
-    {
-      "path": "dist/react-file-hooks.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/react-file-hooks.esm.js",
-      "limit": "10 KB"
-    }
-  ],
-  "peerDependencies": {
-    "react": ">=16",
-    "axios": "*"
+    "build": "npm run clean && npm run build:types && npm run build:outputs",
+    "build:outputs": "rollup -c",
+    "build:types": "tsc --project tsconfig.types.json",
+    "clean": "rimraf lib dist es",
+    "test:watch": "jest --watch"
   },
   "keywords": [
+    "react hook",
     "uploader",
     "hook",
     "react",
     "file-uploader"
   ],
-  "dependencies": {
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.10.2",
-    "@testing-library/react-hooks": "^5.1.2",
-    "@types/react": "^17.0.5",
-    "@types/react-dom": "^17.0.4",
-    "@types/uuid": "^8.3.0",
-    "axios": "^0.21.1",
-    "husky": "^6.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "size-limit": "^4.10.2",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.2.0",
-    "typescript": "^4.2.4"
-  },
+  "authors": [
+    "Omid Poorali <omidpoorali1992@gmail.com> (https://github.com/toranj-org)"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/toranj-org/react-file-hooks.git"
@@ -80,5 +32,35 @@
   "bugs": {
     "url": "https://github.com/toranj-org/react-file-hooks/issues"
   },
-  "homepage": "https://github.com/toranj-org/react-file-hooks#readme"
+  "homepage": "https://github.com/toranj-org/react-file-hooks",
+  "files": [
+    "dist",
+    "es",
+    "lib",
+    "src"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "axios": "^0.27.2",
+    "@jest/types": "^28.1.0",
+    "@rollup/plugin-typescript": "^8.3.0",
+    "@testing-library/react": "^13.0.1",
+    "@testing-library/react-hooks": "^5.1.2",
+    "@types/jest": "^27.4.1",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.4",
+    "jest": "^27.5.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.60.0",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.3"
+  },
+  "peerDependencies": {
+    "axios": "*",
+    "react": "^16.8.3 || ^17 || ^18"
+  }
 }
