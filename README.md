@@ -25,36 +25,77 @@ yarn add @toranj/react-file-hooks axios
 ### `useUploader`
 
 ```jsx
-import * as React from "react";
-import { useUploader } from "@toranj/react-file-hooks";
+import * as React from 'react';
+import { useUploader } from '@toranj/react-file-hooks';
+
+type TriggerProps = {
+  styles?: {
+    root?: React.CSSProperties,
+    button?: React.CSSProperties
+  };
+  name?: string;
+  onClick?: (taskId: string) => void
+}
+
+const Trigger = (props: TriggerProps) => {
+
+  const { name, styles, onClick } = props;
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  return (
+    <div style={styles?.root}>
+      <button
+        style={styles?.button}
+        onClick={() => {
+          if (onClick) onClick(inputRef.current?.value ?? "taskId")
+        }}
+      >
+        {name}
+      </button>
+      <input
+        type="text"
+        placeholder='taskId'
+        ref={inputRef}
+      />
+    </div>
+  )
+}
+
 
 export default () => {
-  const stopId = React.useRef(null);
-  const removeId = React.useRef(null);
-  const retryId = React.useRef(null);
-  const inputRef = React.useRef(null);
 
-  const [uploadTasks, uploadTasksHelper] = useUploader({
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const [tasks, handler] = useUploader({
     url: "https://file.io?expires=1w",
     fieldname: "file",
     method: "post",
-    headers: { "Content-Type": "multipart/form-data" }
+    headers: { "Content-Type": "multipart/form-data" },
     // separately:true  if you want to create seperate task for each file
   });
 
-  function handleChange(e) {
-    uploadTasksHelper.start(
-      e.currentTarget.files
+  function handleChange(e: any) {
+    handler.start(
+      e.currentTarget.files,
       // {
-      //   key1: "value1",
-      //   key2: "value2"
+      //   key1: "value1",      
+      //   key2: "value2"       
       // }
     );
   }
 
+
+  const styles = {
+    mx: { marginRight: 5, marginLeft: 5 },
+    mt: { marginTop: 5 }
+  }
+
   return (
     <div>
-      <pre>{JSON.stringify(uploadTasks, null, 2)}</pre>
+      <pre>
+        {JSON.stringify(tasks, null, 2)}
+      </pre>
+
       <input
         multiple
         ref={inputRef}
@@ -63,49 +104,44 @@ export default () => {
         onChange={handleChange}
       />
       <button
-        style={{ marginRight: 5, marginLeft: 5 }}
+        style={styles.mx}
         onClick={() => inputRef.current?.click()}
       >
         upload
       </button>
-      <div style={{ marginTop: 5 }}>
-        <button
-          style={{ marginRight: 5, marginLeft: 5 }}
-          onClick={() =>
-            uploadTasksHelper.stop(stopId.current?.value ?? "taskId")
-          }
-        >
-          stop
-        </button>
-        <input placeholder="taskId" ref={stopId} type="text" />
-      </div>
-      <div style={{ marginTop: 5 }}>
-        <button
-          style={{ marginRight: 5, marginLeft: 5 }}
-          onClick={() =>
-            uploadTasksHelper.remove(removeId.current?.value ?? "taskId")
-          }
-        >
-          remove
-        </button>
-        <input placeholder="taskId" ref={removeId} type="text" />
-      </div>
-      <div style={{ marginTop: 5 }}>
-        <button
-          style={{ marginRight: 5, marginLeft: 5 }}
-          onClick={() =>
-            uploadTasksHelper.retry(retryId.current?.value ?? "taskId")
-          }
-        >
-          retry
-        </button>
-        <input placeholder="taskId" ref={retryId} type="text" />
-      </div>
+
+      <Trigger
+        name="stop"
+        styles={{
+          root: styles.mt,
+          button: styles.mx
+        }}
+        onClick={(taskId: string) => handler.stop(taskId)}
+      />
+      <Trigger
+        name="remove"
+        styles={{
+          root: styles.mt,
+          button: styles.mx
+        }}
+        onClick={(taskId: string) => handler.remove(taskId)}
+      />
+      <Trigger
+        name="retry"
+        styles={{
+          root: styles.mt,
+          button: styles.mx
+        }}
+        onClick={(taskId: string) => handler.retry(taskId)}
+      />
     </div>
   );
 };
 
 ```
+
+## License
+MIT
 
 [npm-image]: https://img.shields.io/npm/v/@toranj/react-file-hooks
 [npm-url]: https://www.npmjs.com/package/@toranj/react-file-hooks
