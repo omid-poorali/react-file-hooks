@@ -1,9 +1,10 @@
 import { AxiosRequestHeaders, Method } from "axios";
 
 export const Uploading = "uploading";
+export const Stopped = "stopped";
 export const Uploaded = "uploaded";
 export const Failed = "failed";
-export type UploadStatus =  typeof Uploading | typeof Uploaded | typeof Failed;
+export type UploadStatus =  typeof Uploading | typeof Stopped | typeof Uploaded | typeof Failed;
 
 export type UploadParams = {
   url: any;

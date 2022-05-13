@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Utils from '../utils';
 import axios from 'axios';
-import { Failed, Task, Uploaded, Uploader, Uploading, UploadParams } from '../types';
+import { Failed, Stopped, Task, Uploaded, Uploader, Uploading, UploadParams } from '../types';
 
 type AbortMap = {
   [key: string]: AbortController
@@ -23,6 +23,11 @@ export function useUploader<Result = any>({
     }
   }, [mounted])
 
+  const addTask = (newTask: Task<Result>) => {
+    if (!mounted.current) return;
+    setTasks(prevData => [...prevData, newTask]);
+  }
+
   const updateTask = (id: string, newData: Partial<Task<Result>>) => {
     if (!mounted.current) return;
     setTasks(tasks => tasks.map(t => {
@@ -31,6 +36,12 @@ export function useUploader<Result = any>({
       }
       return t;
     }));
+  }
+
+
+  const removeTask = (id: string) => {
+    if (!mounted.current) return;
+    setTasks((prevData: Task<Result>[]) => prevData.filter((task: Task<Result>) => task.id !== id));
   }
 
   const setAbort = (id: string, controller: AbortController): void => {
@@ -50,8 +61,7 @@ export function useUploader<Result = any>({
       onUploadProgress: ({ total, loaded }: ProgressEvent) => {
         const progress = Math.round((loaded / total) * 100);
         updateTask(id, {
-          progress,
-          status: Uploading
+          progress
         });
       }
     };
@@ -125,7 +135,7 @@ export function useUploader<Result = any>({
           formattedSize: Utils.formatFileSize(file.size),
           meta
         }
-        setTasks(prevData => [...prevData, newTask]);
+        addTask(newTask);
         uploadFile(newTask)
       })
     }
@@ -144,27 +154,35 @@ export function useUploader<Result = any>({
         formattedSize: Utils.formatFileSize(filesSize),
         meta
       }
-      setTasks(prevData => [...prevData, newTask]);
+      addTask(newTask);
       uploadFile(newTask)
     }
 
   }
 
-
   const retry = (id: string) => {
     const targetTask = tasks.find((task: Task<Result>) => task.id.includes(id));
     if (targetTask) {
+      updateTask(id, {
+        status: Uploading
+      });
       uploadFile(targetTask);
     }
   }
 
   const remove = (id: string) => {
-    setTasks((prevData: Task<Result>[]) => prevData.filter((task: Task<Result>) => task.id !== id));
+    removeTask(id);
     const controller = getAbort(id);
     if (controller) controller.abort()
   }
 
   const stop = (id: string) => {
+    const targetTask = tasks.find((task: Task<Result>) => task.id.includes(id));
+    if (targetTask) {
+      updateTask(id, {
+        status: Stopped
+      });
+    }
     const controller = getAbort(id);
     if (controller) controller.abort()
   }
