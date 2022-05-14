@@ -6,7 +6,7 @@
 React File Hooks is a hook simply for file upload
 It can be used with a simple `<input type="file"/>`
 
-🖥️[Live Example](https://codesandbox.io/s/react-file-hooks-ygi10)
+🖥️[Live Example](https://codesandbox.io/s/upbeat-sun-ilydnm?file=/src/App.tsx)
 
 ## Installation
 
