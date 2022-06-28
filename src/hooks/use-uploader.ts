@@ -133,6 +133,7 @@ export function useUploader<Result = any>({
           progress: 0,
           status: Uploading,
           formattedSize: Utils.formatFileSize(file.size),
+          size: file.size,
           meta
         }
         addTask(newTask);
@@ -152,6 +153,7 @@ export function useUploader<Result = any>({
         progress: 0,
         status: Uploading,
         formattedSize: Utils.formatFileSize(filesSize),
+        size: filesSize,
         meta
       }
       addTask(newTask);
