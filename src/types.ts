@@ -25,6 +25,7 @@ export type Task<A = any> = {
   progress: number;
   status: UploadStatus;
   formattedSize: string;
+  size: number;
   meta?: { [key: string]: any };
   result?: TaskResult<A>;
 }

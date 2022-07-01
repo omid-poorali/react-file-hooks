@@ -47,6 +47,7 @@ it('sucessfully uploaded a file', async () => {
     key2: "value2"
   });
   expect(result.current[0][0].formattedSize).toEqual('12 B');
+  expect(result.current[0][0].size).toEqual(12)
   expect(result.current[0][0].progress).toEqual(25);
   expect(result.current[0][0].status).toEqual(Uploading);
 
@@ -102,6 +103,7 @@ it('stop uploading process', async () => {
     key2: "value2"
   });
   expect(result.current[0][0].formattedSize).toEqual('12 B');
+  expect(result.current[0][0].size).toEqual(12)
   expect(result.current[0][0].progress).toEqual(25);
   expect(result.current[0][0].status).toEqual(Uploading);
 
@@ -150,6 +152,7 @@ it('uploaded failed', async () => {
     key2: "value2"
   });
   expect(result.current[0][0].formattedSize).toEqual('12 B');
+  expect(result.current[0][0].size).toEqual(12)
   expect(result.current[0][0].status).toEqual(Failed);
   expect(result.current[0][0].result).toEqual({
     httpStatus: 401,
