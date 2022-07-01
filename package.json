@@ -1,6 +1,6 @@
 {
   "name": "@toranj/react-file-hooks",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "react hook for uploading file or files",
   "source": "./src/index.ts",
   "main": "./lib/index.js",
@@ -25,6 +25,9 @@
   ],
   "authors": [
     "Omid Poorali <omidpoorali1992@gmail.com> (https://github.com/toranj-org)"
+  ],
+  "contributors": [
+    {"name":"Cora Sutton","url":"https://github.com/corasaurus-hex"}
   ],
   "repository": {
     "type": "git",
