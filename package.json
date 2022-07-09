@@ -1,6 +1,6 @@
 {
   "name": "@toranj/react-file-hooks",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "react hook for uploading file or files",
   "source": "./src/index.ts",
   "main": "./lib/index.js",
