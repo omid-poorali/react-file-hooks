@@ -1,4 +1,4 @@
-import { AxiosRequestHeaders, Method } from "axios";
+import { AxiosError, AxiosRequestHeaders, Method } from "axios";
 
 export const Uploading = "uploading";
 export const Stopped = "stopped";
@@ -17,6 +17,7 @@ export type UploadParams = {
 export type TaskResult<A = any> = {
   httpStatus: number | undefined;
   responseData: A | undefined;
+  error?: AxiosError<A> | Error | undefined;
 }
 
 export type Task<A = any> = {

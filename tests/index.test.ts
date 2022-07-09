@@ -65,6 +65,7 @@ it('sucessfully uploaded a file', async () => {
     }
   });
 
+  expect(result.current[0][0].result?.error).toBeUndefined();
 });
 
 it('stop uploading process', async () => {
@@ -155,6 +156,14 @@ it('uploaded failed', async () => {
   expect(result.current[0][0].size).toEqual(12)
   expect(result.current[0][0].status).toEqual(Failed);
   expect(result.current[0][0].result).toEqual({
+    error: {
+      response: {
+        data: {
+            message: "unauthorized",
+        },
+        status: 401,
+      },
+    },
     httpStatus: 401,
     responseData: {
       message: 'unauthorized'

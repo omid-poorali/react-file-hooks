@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Utils from '../utils';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Failed, Stopped, Task, Uploaded, Uploader, Uploading, UploadParams } from '../types';
 
 type AbortMap = {
@@ -82,7 +82,7 @@ export function useUploader<Result = any>({
       else form.append(`${fieldname}`, source);
 
 
-      const res = await axios.request({
+      const res = await axios.request<Result>({
         ...defaultConfig,
         ...{ url, method, headers, data: form },
       })
@@ -90,17 +90,20 @@ export function useUploader<Result = any>({
       updateTask(id, {
         status: Uploaded, result: {
           httpStatus: res.status,
-          responseData: res.data as Result
+          responseData: res.data
         }
       });
 
     } catch (error) {
       const { response }: any = error;
       if (response) {
+        const errorResult = axios.isAxiosError(error) ? error as AxiosError<Result> : error as Error;
+
         updateTask(id, {
           status: Failed, result: {
             httpStatus: response?.status,
-            responseData: response?.data as Result
+            responseData: response?.data,
+            error: errorResult
           }
         });
       }
